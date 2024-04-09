@@ -90,17 +90,15 @@ fn get_day_services(document: &Html) -> Vec<Service> {
     service_list
 }
 
-fn print_service_table(service_list: &Vec<Service>, all_plat: bool) {
-    println!("------------------------------------------------");
+fn pretty_print_services(service_list: &Vec<Service>, all_plat: bool) {
     for service in service_list.iter() {
         if service.platform == 0 || all_plat {
             println!(
-                "| {:4} | {:30} | {:3} |",
+                "{:4} {:21} {:3} ",
                 service.departure_time, service.destination, service.platform
             )
         }
     }
-    println!("------------------------------------------------");
 }
 
 fn csv_to_stdout(column1: &String, service_list: &Vec<Service>, all_plat: bool) {
@@ -139,7 +137,7 @@ fn main() {
             csv_to_stdout(&date.get_iso(), &day_service_list, all_platforms);
         } else {
             println!("date: {}", date.get_iso());
-            print_service_table(&day_service_list, all_platforms);
+            pretty_print_services(&day_service_list, all_platforms);
         }
         date.next_day()
     }
