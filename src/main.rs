@@ -123,11 +123,11 @@ fn main() {
     let mut date = Date {
         year: 2024,
         month: 04,
-        day: 05,
+        day: 09,
     };
-    let range = 5;
+    let range = 1;
 
-    for _ in 1..range {
+    for _ in 0..range {
         let document = request_document(&date.get_iso(), station);
 
         let day_service_list = get_day_services(&document);
