@@ -78,9 +78,7 @@ fn get_day_services(document: &Html) -> Vec<Service> {
         let destination = get_inner_html(&destination_selector, &service);
         let platform_string = get_inner_html(&platform_selector, &service);
         let departure_time = get_inner_html(&departure_time_selector, &service);
-
         let platform = platform_string.parse().unwrap_or(255);
-
         service_list.push(Service {
             departure_time,
             destination,
