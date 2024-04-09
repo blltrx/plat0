@@ -117,7 +117,7 @@ fn request_document(date: &str, station: &str) -> Html {
 }
 
 fn main() {
-    let csv = false;
+    let csv = true;
     let all_platforms = false;
     let station = "SPT";
     let mut date = Date {
