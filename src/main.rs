@@ -1,5 +1,4 @@
 use scraper::{ElementRef, Html, Selector};
-use std::env;
 
 struct Service {
     departure_time: String,
@@ -122,20 +121,8 @@ fn request_document(date: &str, station: &str) -> Html {
 }
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let csv = match args.len() {
-        1 => false,
-        2 => {
-            if args[1] == "csv" {
-                true
-            } else {
-                false
-            }
-        }
-        _ => panic!("plat0 accepts up to one argument, 'csv' to invoke csv formatted output"),
-    };
-
-    let all_platforms = true;
+    let csv = false;
+    let all_platforms = false;
     let station = "SPT";
     let mut date = Date {
         year: 2024,
