@@ -68,7 +68,7 @@ fn get_inner_html(selector: &Selector, service: &ElementRef) -> String {
     return element;
 }
 
-fn get_day_services(document: &Html) -> Vec<Service> {
+fn parse_services(document: &Html) -> Vec<Service> {
     let mut service_list: Vec<Service> = vec![];
     let service_selector = Selector::parse("a.service").unwrap();
     let destination_selector = Selector::parse("div.location.d>span").unwrap();
@@ -100,7 +100,7 @@ fn pretty_print_services(service_list: &Vec<Service>, all_plat: bool) {
     }
 }
 
-fn csv_to_stdout(column1: &String, service_list: &Vec<Service>, all_plat: bool) {
+fn csv_services(column1: &String, service_list: &Vec<Service>, all_plat: bool) {
     for service in service_list.iter() {
         if service.platform == 0 || all_plat {
             println!(
@@ -113,12 +113,12 @@ fn csv_to_stdout(column1: &String, service_list: &Vec<Service>, all_plat: bool) 
 
 fn request_document(date: &str, station: &str) -> Html {
     let url = format!("https://www.realtimetrains.co.uk/search/detailed/gb-nr:{}/{}/0000-2359?stp=WVS&show=pax-calls&order=wtt", station, date);
-    let res = get(url).unwrap().text().unwrap();
-    Html::parse_document(&res)
+    let result = reqwest::blocking::get(url).unwrap().text().unwrap();
+    return Html::parse_document(&result);
 }
 
 fn main() {
-    let csv = false;
+    let csv = true;
     let all_platforms = false;
     let station = "SPT";
     let mut date = Date {
@@ -131,9 +131,9 @@ fn main() {
     for _ in 0..range {
         let document = request_document(&date.get_iso(), station);
 
-        let day_service_list = get_day_services(&document);
+        let day_service_list = parse_services(&document);
         if csv {
-            csv_to_stdout(&date.get_iso(), &day_service_list, all_platforms);
+            csv_services(&date.get_iso(), &day_service_list, all_platforms);
         } else {
             println!("date: {}", date.get_iso());
             pretty_print_services(&day_service_list, all_platforms);
