@@ -113,7 +113,7 @@ fn csv_services(column1: &String, service_list: &Vec<Service>, all_plat: bool) {
 
 fn request_document(date: &str, station: &str) -> Html {
     let url = format!("https://www.realtimetrains.co.uk/search/detailed/gb-nr:{}/{}/0000-2359?stp=WVS&show=pax-calls&order=wtt", station, date);
-    let result = reqwest::blocking::get(url).unwrap().text().unwrap();
+    let result = get(url).unwrap().text().unwrap();
     return Html::parse_document(&result);
 }
 
