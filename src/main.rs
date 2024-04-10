@@ -1,3 +1,4 @@
+use reqwest::blocking::get;
 use scraper::{ElementRef, Html, Selector};
 
 struct Service {
@@ -112,7 +113,7 @@ fn csv_to_stdout(column1: &String, service_list: &Vec<Service>, all_plat: bool) 
 
 fn request_document(date: &str, station: &str) -> Html {
     let url = format!("https://www.realtimetrains.co.uk/search/detailed/gb-nr:{}/{}/0000-2359?stp=WVS&show=pax-calls&order=wtt", station, date);
-    let res = reqwest::blocking::get(url).unwrap().text().unwrap();
+    let res = get(url).unwrap().text().unwrap();
     Html::parse_document(&res)
 }
 
