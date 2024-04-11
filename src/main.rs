@@ -46,7 +46,7 @@ impl Date {
         true
     }
 
-    fn next_day(&mut self) {
+    fn increment_day(&mut self) {
         self.day += 1;
         if !self.valid() {
             self.day = 1;
@@ -118,13 +118,13 @@ fn request_document(date: &str, station: &str) -> Html {
 }
 
 fn main() {
-    let csv = true;
+    let csv = false;
     let all_platforms = false;
     let station = "SPT";
     let mut date = Date {
         year: 2024,
         month: 04,
-        day: 09,
+        day: 11,
     };
     let range = 1;
 
@@ -138,6 +138,6 @@ fn main() {
             println!("date: {}", date.get_iso());
             pretty_print_services(&day_service_list, all_platforms);
         }
-        date.next_day()
+        date.increment_day()
     }
 }
