@@ -19,10 +19,10 @@ impl Date {
     }
 
     fn valid(&self) -> bool {
-        if self.year > 2024 {
+        if self.year > 2025 {
             return false;
         };
-        if self.year < 2021 {
+        if self.year < 2001 {
             return false;
         };
         if self.day < 1 {
@@ -132,6 +132,7 @@ fn main() {
         let document = request_document(&date.get_iso(), station);
 
         let day_service_list = parse_services(&document);
+
         if csv {
             csv_services(&date.get_iso(), &day_service_list, all_platforms);
         } else {
