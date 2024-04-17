@@ -5,6 +5,7 @@ struct Service {
     departure_time: String,
     destination: String,
     platform: u8,
+    toc: String
 }
 
 struct Date {
@@ -74,10 +75,12 @@ fn parse_services(document: &Html) -> Vec<Service> {
     let destination_selector = Selector::parse("div.location.d>span").unwrap();
     let platform_selector = Selector::parse("div.platform.c.act").unwrap();
     let departure_time_selector = Selector::parse("div.time.d.gbtt").unwrap();
+    let toc_selector = Selector::parse("div.toc").unwrap();
 
     for service in document.select(&service_selector) {
         let destination = get_inner_html(&destination_selector, &service);
         let platform_string = get_inner_html(&platform_selector, &service);
+        let toc = get_inner_html(&toc_selector, &service);
         let departure_time = get_inner_html(&departure_time_selector, &service);
         let platform = platform_string.parse().unwrap_or(255);
         if destination == String::new() {continue};
@@ -85,28 +88,18 @@ fn parse_services(document: &Html) -> Vec<Service> {
             departure_time,
             destination,
             platform,
+            toc,
         });
     }
     service_list
-}
-
-fn pretty_print_services(service_list: &Vec<Service>, all_plat: bool) {
-    for service in service_list.iter() {
-        if service.platform == 0 || all_plat {
-            println!(
-                "{:4} {:21} {:3} ",
-                service.departure_time, service.destination, service.platform
-            )
-        }
-    }
 }
 
 fn csv_services(column1: &String, service_list: &Vec<Service>, all_plat: bool) {
     for service in service_list.iter() {
         if service.platform == 0 || all_plat {
             println!(
-                "{}, {}, {}, {}",
-                column1, service.departure_time, service.destination, service.platform
+                "{}, {}, {}, {}, {}",
+                column1, service.departure_time, service.destination, service.platform, service.toc
             )
         }
     }
@@ -119,9 +112,8 @@ fn request_document(date: &str, station: &str) -> Html {
 }
 
 fn main() {
-    let csv = true;
     let all_platforms = false;
-    let station = "CDF";
+    let station = "SPT";
     let mut date = Date {
         year: 2024,
         month: 04,
@@ -134,12 +126,7 @@ fn main() {
 
         let day_service_list = parse_services(&document);
 
-        if csv {
-            csv_services(&date.get_iso(), &day_service_list, all_platforms);
-        } else {
-            println!("date: {}", date.get_iso());
-            pretty_print_services(&day_service_list, all_platforms);
-        }
+        csv_services(&date.get_iso(), &day_service_list, all_platforms);
         date.increment_day()
     }
 }
