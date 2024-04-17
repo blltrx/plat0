@@ -80,6 +80,7 @@ fn parse_services(document: &Html) -> Vec<Service> {
         let platform_string = get_inner_html(&platform_selector, &service);
         let departure_time = get_inner_html(&departure_time_selector, &service);
         let platform = platform_string.parse().unwrap_or(255);
+        if destination == String::new() {continue};
         service_list.push(Service {
             departure_time,
             destination,
@@ -120,13 +121,13 @@ fn request_document(date: &str, station: &str) -> Html {
 fn main() {
     let csv = true;
     let all_platforms = false;
-    let station = "SPT";
+    let station = "CDF";
     let mut date = Date {
         year: 2024,
         month: 04,
-        day: 17,
+        day: 10,
     };
-    let range = 1;
+    let range = 6;
 
     for _ in 0..range {
         let document = request_document(&date.get_iso(), station);
