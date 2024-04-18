@@ -123,9 +123,7 @@ fn main() {
 
     for _ in 0..range {
         let document = request_document(&date.get_iso(), station);
-
         let day_service_list = parse_services(&document);
-
         csv_services(&date.get_iso(), &day_service_list, all_platforms);
         date.increment_day()
     }
