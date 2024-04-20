@@ -50,9 +50,9 @@ pub fn request_document(date: &str, station: &str) -> Html {
     return Html::parse_document(&result);
 }
 
-pub fn csv_services(column1: &String, service_list: &Vec<Service>, all_plat: bool) {
+pub fn csv_services(column1: &String, service_list: &Vec<Service>, all_plats: bool) {
     for service in service_list.iter() {
-        if service.platform == 0 || all_plat {
+        if service.platform == 0 || all_plats {
             println!(
                 "{}, {}, {}, {}, {}",
                 column1, service.departure_time, service.destination, service.platform, service.toc
