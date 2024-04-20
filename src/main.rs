@@ -28,8 +28,7 @@ fn main() {
     // main program
     println!("date, departure time, destination, platform, toc");
     for _ in 0..args.range {
-        let document = scrape::request_document(&date.get_iso(), station);
-        let day_service_list = scrape::parse_services(&document);
+        let day_service_list = scrape::get_services(&date.get_iso(), station);
         scrape::csv_services(&date.get_iso(), &day_service_list, !args.only_platform_zero);
         date.increment_day()
     }

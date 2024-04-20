@@ -17,23 +17,20 @@ fn get_inner_html(selector: &Selector, service: &ElementRef) -> String {
     return element;
 }
 
-pub fn parse_services(document: &Html) -> Vec<Service> {
-    let mut service_list: Vec<Service> = vec![];
-    let service_selector = Selector::parse("a.service").unwrap();
-    let destination_selector = Selector::parse("div.location.d>span").unwrap();
-    let platform_selector = Selector::parse("div.platform.c.act").unwrap();
-    let departure_time_selector = Selector::parse("div.time.d.gbtt").unwrap();
-    let toc_selector = Selector::parse("div.toc").unwrap();
+fn parse_document(document :&Html) -> Vec<Service> {
+    let mut service_list: Vec<Service> = Vec::new();
 
-    for service in document.select(&service_selector) {
-        let destination = get_inner_html(&destination_selector, &service);
-        let platform_string = get_inner_html(&platform_selector, &service);
-        let toc = get_inner_html(&toc_selector, &service);
-        let departure_time = get_inner_html(&departure_time_selector, &service);
+    for service in document.select(&Selector::parse("a.service").unwrap()) {
+        let destination = get_inner_html(&Selector::parse("div.location.d>span").unwrap(), &service);
+        let platform_string = get_inner_html(&Selector::parse("div.platform.c.act").unwrap(), &service);
+        let departure_time = get_inner_html(&Selector::parse("div.time.d.gbtt").unwrap(), &service);
+        let toc = get_inner_html(&Selector::parse("div.toc").unwrap(), &service);
         let platform = platform_string.parse().unwrap_or(255);
-        if destination == String::new() {
+
+        if destination == String::new() { // removes terminating services
             continue;
         };
+
         service_list.push(Service {
             departure_time,
             destination,
@@ -41,13 +38,15 @@ pub fn parse_services(document: &Html) -> Vec<Service> {
             toc,
         });
     }
-    service_list
+    return service_list;
 }
 
-pub fn request_document(date: &str, station: &str) -> Html {
+pub fn get_services(date: &str, station: &str) -> Vec<Service> {
     let url = format!("https://www.realtimetrains.co.uk/search/detailed/gb-nr:{}/{}/0000-2359?stp=WVS&show=pax-calls&order=wtt", station, date);
     let result = get(url).unwrap().text().unwrap();
-    return Html::parse_document(&result);
+    let document = Html::parse_document(&result);
+
+    parse_document(&document)
 }
 
 pub fn csv_services(date: &String, service_list: &Vec<Service>, all_plats: bool) {
