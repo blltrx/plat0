@@ -3,10 +3,17 @@ pub mod date;
 pub mod scrape;
 
 #[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
 struct Args {
+    /// NR 3 char station code
+    #[clap(verbatim_doc_comment)]
     station: String,
+
+    /// ISO formatted date between year 2001 and 2100
+    /// <year>-<month>-<day>
+    #[clap(verbatim_doc_comment)]
     date: String,
+
+    /// Range of days to search starting on DATE
     range: u8,
     #[arg(short, long, default_value_t = false)]
     only_platform_zero: bool,
