@@ -3,3 +3,17 @@
 This is a rust based web scraper for real time trains, focused on actual historic platform allocation. Its original use was to track platform zero calls at Stockport station due to its irregular patter. 
 
 This is part of my [platform zero](https://roseis.gay/projects/plat0) project.
+# usage
+
+`plat0 [OPTIONS] <STATION> <DATE> <RANGE>`
+```
+Arguments:
+  <STATION>  NR 3 char station code
+  <DATE>     ISO formatted date between year 2001 and 2100
+             <year>-<month>-<day>
+  <RANGE>    Range of days to search starting on DATE
+
+Options:
+  -o, --only-platform-zero  
+  -h, --help                Print help
+```
