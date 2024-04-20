@@ -51,7 +51,6 @@ pub fn request_document(date: &str, station: &str) -> Html {
 }
 
 pub fn csv_services(date: &String, service_list: &Vec<Service>, all_plats: bool) {
-    println!("date, departure time, destination, platform, toc");
     for service in service_list.iter() {
         if service.platform == 0 || all_plats {
             println!(
