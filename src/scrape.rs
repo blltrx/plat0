@@ -17,17 +17,20 @@ fn get_inner_html(selector: &Selector, service: &ElementRef) -> String {
     return element;
 }
 
-fn parse_document(document :&Html) -> Vec<Service> {
+fn parse_document(document: &Html) -> Vec<Service> {
     let mut service_list: Vec<Service> = Vec::new();
 
     for service in document.select(&Selector::parse("a.service").unwrap()) {
-        let destination = get_inner_html(&Selector::parse("div.location.d>span").unwrap(), &service);
-        let platform_string = get_inner_html(&Selector::parse("div.platform.c.act").unwrap(), &service);
+        let destination =
+            get_inner_html(&Selector::parse("div.location.d>span").unwrap(), &service);
+        let platform_string =
+            get_inner_html(&Selector::parse("div.platform.c.act").unwrap(), &service);
         let departure_time = get_inner_html(&Selector::parse("div.time.d.gbtt").unwrap(), &service);
         let toc = get_inner_html(&Selector::parse("div.toc").unwrap(), &service);
         let platform = platform_string.parse().unwrap_or(255);
 
-        if destination == String::new() { // removes terminating services
+        if destination == String::new() {
+            // removes terminating services
             continue;
         };
 

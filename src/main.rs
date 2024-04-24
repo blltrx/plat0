@@ -14,8 +14,12 @@ struct Args {
     date: String,
 
     /// Range of days to search starting on DATE
-    #[arg(default_value_t=1)]
+    #[clap(verbatim_doc_comment)]
+    #[arg(default_value_t = 1)]
     range: u8,
+
+    /// Only show calls at platform zero
+    #[clap(verbatim_doc_comment)]
     #[arg(short, long, default_value_t = false)]
     only_platform_zero: bool,
 }
