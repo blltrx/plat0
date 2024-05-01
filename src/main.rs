@@ -10,7 +10,7 @@ struct Args {
 
     /// ISO formatted date between year 2001 and 2100
     /// <year>-<month>-<day>
-    #[clap(verbatim_doc_comment)]
+    #[clap(verbatim_doc_comment, default_value_t = date::get_current_date_iso())]
     date: String,
 
     /// Range of days to search starting on DATE
