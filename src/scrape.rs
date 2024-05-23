@@ -2,7 +2,9 @@ use reqwest::blocking::get;
 use scraper::{ElementRef, Html, Selector};
 
 pub struct Service {
+    pub arrival_time: String,
     pub departure_time: String,
+    pub origin: String,
     pub destination: String,
     pub platform: u8,
     pub toc: String,
@@ -13,7 +15,7 @@ fn get_inner_html(selector: &Selector, service: &ElementRef) -> String {
         .select(selector)
         .map(|x| x.inner_html())
         .next()
-        .unwrap_or(String::new());
+        .unwrap_or(String::from("~~~~"));
     return element;
 }
 
@@ -23,19 +25,23 @@ fn parse_document(document: &Html) -> Vec<Service> {
     for service in document.select(&Selector::parse("a.service").unwrap()) {
         let destination =
             get_inner_html(&Selector::parse("div.location.d>span").unwrap(), &service);
+        let origin = get_inner_html(&Selector::parse("div.location.o>span").unwrap(), &service);
         let platform_string =
             get_inner_html(&Selector::parse("div.platform.c.act").unwrap(), &service);
         let departure_time = get_inner_html(&Selector::parse("div.time.d.gbtt").unwrap(), &service);
+        let arrival_time = get_inner_html(&Selector::parse("div.time.a.gbtt").unwrap(), &service);
         let toc = get_inner_html(&Selector::parse("div.toc").unwrap(), &service);
         let platform = platform_string.parse().unwrap_or(255);
 
-        if destination == String::new() {
-            // removes terminating services
-            continue;
-        };
+        // if destination == String::new() {
+        //     // removes terminating services
+        //     continue;
+        // };
 
         service_list.push(Service {
+            arrival_time,
             departure_time,
+            origin,
             destination,
             platform,
             toc,
@@ -56,8 +62,14 @@ pub fn csv_services(date: &String, service_list: &Vec<Service>, all_plats: bool)
     for service in service_list.iter() {
         if service.platform == 0 || all_plats {
             println!(
-                "{}, {}, {}, {}, {}",
-                date, service.departure_time, service.destination, service.platform, service.toc
+                "{:<10}, {:<4}, {:<26}, {:<26}, {:<4}, {:<3}, {:<3}",
+                date,
+                service.arrival_time,
+                service.origin,
+                service.destination,
+                service.departure_time,
+                service.platform,
+                service.toc
             )
         }
     }

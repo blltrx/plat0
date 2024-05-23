@@ -31,7 +31,9 @@ fn main() {
         .expect("INVALID DATE (must exist between year 2001 and 2100)");
 
     // main program
-    println!("date, departure time, destination, platform, toc");
+    println!(
+        "date      , arr., origin                    , destination               , dep., plt, toc"
+    );
     for _ in 0..args.range {
         let day_service_list = scrape::get_services(&date.get_iso(), station);
         scrape::csv_services(&date.get_iso(), &day_service_list, !args.only_platform_zero);
