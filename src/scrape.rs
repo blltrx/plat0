@@ -19,7 +19,7 @@ fn get_inner_html(selector: &Selector, service: &ElementRef) -> String {
     element
 }
 
-fn parse_document(document: &Html) -> Vec<Service> {
+fn get_service_list_from_html(document: &Html) -> Vec<Service> {
     let mut service_list: Vec<Service> = Vec::new();
 
     for service in document.select(&Selector::parse("a.service").unwrap()) {
@@ -55,7 +55,7 @@ pub fn get_services(date: &str, station: &str) -> Vec<Service> {
     let result = get(url).unwrap().text().unwrap();
     let document = Html::parse_document(&result);
 
-    parse_document(&document)
+    get_service_list_from_html(&document)
 }
 
 pub fn csv_services(date: &String, service_list: &[Service], all_plats: bool) {
