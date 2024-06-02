@@ -16,7 +16,7 @@ fn get_inner_html(selector: &Selector, service: &ElementRef) -> String {
         .map(|x| x.inner_html())
         .next()
         .unwrap_or(String::from("~~~~"));
-    return element;
+    element
 }
 
 fn parse_document(document: &Html) -> Vec<Service> {
@@ -47,7 +47,7 @@ fn parse_document(document: &Html) -> Vec<Service> {
             toc,
         });
     }
-    return service_list;
+    service_list
 }
 
 pub fn get_services(date: &str, station: &str) -> Vec<Service> {
@@ -58,7 +58,7 @@ pub fn get_services(date: &str, station: &str) -> Vec<Service> {
     parse_document(&document)
 }
 
-pub fn csv_services(date: &String, service_list: &Vec<Service>, all_plats: bool) {
+pub fn csv_services(date: &String, service_list: &[Service], all_plats: bool) {
     for service in service_list.iter() {
         if service.platform == 0 || all_plats {
             println!(

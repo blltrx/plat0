@@ -24,7 +24,7 @@ impl Date {
         //! let mut date = Date::from_iso("2024-04-21");
         //! ```
         let date_split: [u32; 3] = date_string
-            .split("-")
+            .split('-')
             .map(|x| x.parse::<u32>().expect("COULD NOT PARSE TO INT"))
             .collect::<Vec<u32>>()
             .as_slice()
@@ -82,9 +82,7 @@ impl Date {
     }
 }
 
-pub fn get_current_date_iso() -> String{
-    let date= chrono::Local::now()
-        .format("%Y-%m-%d")
-        .to_string();
-    return date;
+pub fn get_current_date_iso() -> String {
+    let date = chrono::Local::now().format("%Y-%m-%d").to_string();
+    date
 }
