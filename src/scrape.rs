@@ -10,27 +10,45 @@ pub struct Service {
     pub toc: String,
 }
 
-fn get_inner_html(selector: &Selector, service: &ElementRef) -> String {
+fn get_inner_html(selector: &Selector, service: &ElementRef, missing: &str) -> String {
     let element = service
         .select(selector)
         .map(|x| x.inner_html())
         .next()
-        .unwrap_or(String::from("~~~~"));
+        .unwrap_or(String::from(missing));
     element
 }
 
-fn get_service_list_from_html(document: &Html) -> Vec<Service> {
+fn get_service_list_from_html(document: &Html, missing: &str) -> Vec<Service> {
     let mut service_list: Vec<Service> = Vec::new();
 
     for service in document.select(&Selector::parse("a.service").unwrap()) {
-        let destination =
-            get_inner_html(&Selector::parse("div.location.d>span").unwrap(), &service);
-        let origin = get_inner_html(&Selector::parse("div.location.o>span").unwrap(), &service);
-        let platform_string =
-            get_inner_html(&Selector::parse("div.platform.c.act").unwrap(), &service);
-        let departure_time = get_inner_html(&Selector::parse("div.time.d.gbtt").unwrap(), &service);
-        let arrival_time = get_inner_html(&Selector::parse("div.time.a.gbtt").unwrap(), &service);
-        let toc = get_inner_html(&Selector::parse("div.toc").unwrap(), &service);
+        let destination = get_inner_html(
+            &Selector::parse("div.location.d>span").unwrap(),
+            &service,
+            missing,
+        );
+        let origin = get_inner_html(
+            &Selector::parse("div.location.o>span").unwrap(),
+            &service,
+            missing,
+        );
+        let platform_string = get_inner_html(
+            &Selector::parse("div.platform.c.act").unwrap(),
+            &service,
+            missing,
+        );
+        let departure_time = get_inner_html(
+            &Selector::parse("div.time.d.gbtt").unwrap(),
+            &service,
+            missing,
+        );
+        let arrival_time = get_inner_html(
+            &Selector::parse("div.time.a.gbtt").unwrap(),
+            &service,
+            missing,
+        );
+        let toc = get_inner_html(&Selector::parse("div.toc").unwrap(), &service, missing);
         let platform = platform_string.parse().unwrap_or(255);
 
         // if destination == String::new() {
@@ -50,12 +68,12 @@ fn get_service_list_from_html(document: &Html) -> Vec<Service> {
     service_list
 }
 
-pub fn get_services(date: &str, station: &str) -> Vec<Service> {
+pub fn get_services(date: &str, station: &str, missing: &str) -> Vec<Service> {
     let url = format!("https://www.realtimetrains.co.uk/search/detailed/gb-nr:{}/{}/0000-2359?stp=WVS&show=pax-calls&order=wtt", station, date);
     let result = get(url).unwrap().text().unwrap();
     let document = Html::parse_document(&result);
 
-    get_service_list_from_html(&document)
+    get_service_list_from_html(&document, missing)
 }
 
 pub fn csv_services(date: &String, service_list: &[Service], all_plats: bool) {

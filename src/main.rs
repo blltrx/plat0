@@ -22,6 +22,11 @@ struct Args {
     #[clap(verbatim_doc_comment)]
     #[arg(short, long, default_value_t = false)]
     only_platform_zero: bool,
+
+    /// Character for empty entries
+    #[clap(verbatim_doc_comment)]
+    #[arg(short, long, default_value_t = String::from("~~~~"))]
+    missing_string: String,
 }
 
 fn main() {
@@ -35,7 +40,7 @@ fn main() {
         "date      , arr., origin                    , destination               , dep., plt, toc"
     );
     for _ in 0..args.range {
-        let day_service_list = scrape::get_services(&date.get_iso(), station);
+        let day_service_list = scrape::get_services(&date.get_iso(), station, &args.missing_string);
         scrape::csv_services(&date.get_iso(), &day_service_list, !args.only_platform_zero);
         date.increment_day()
     }
