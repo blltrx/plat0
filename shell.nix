@@ -15,6 +15,9 @@ let
   };
 in
 pkgs.mkShell {
+  packages = with pkgs; [
+    bacon
+  ];
   buildInputs = [
     rust
   ] ++ (with pkgs; [
