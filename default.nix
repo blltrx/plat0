@@ -5,7 +5,6 @@ let
 in
 pkgs.rustPlatform.buildRustPackage {
   pname = manifest.name;
-  rustPlatform = system;
   version = manifest.version;
 
   nativeBuildInputs = with pkgs; [ openssl pkg-config bacon rust-analyzer];
