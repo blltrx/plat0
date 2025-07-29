@@ -1,4 +1,4 @@
-{ nixpkgs, system}:
+{ nixpkgs, system }:
 let
   pkgs = nixpkgs.legacyPackages.${system};
   manifest = (nixpkgs.lib.importTOML ./Cargo.toml).package;
