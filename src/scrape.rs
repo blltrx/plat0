@@ -69,7 +69,7 @@ fn get_service_list_from_html(document: &Html, missing: &str) -> Vec<Service> {
 }
 
 pub fn get_services(date: &str, station: &str, missing: &str) -> Vec<Service> {
-    let url = format!("https://www.realtimetrains.co.uk/search/detailed/gb-nr:{}/{}/0000-2359?stp=WVS&show=pax-calls&order=wtt", station, date);
+    let url = format!("https://www.realtimetrains.co.uk/search/detailed/gb-nr:{station}/{date}/0000-2359?stp=WVS&show=pax-calls&order=wtt");
     let result = get(url).unwrap().text().unwrap();
     let document = Html::parse_document(&result);
 
